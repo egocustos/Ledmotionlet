@@ -1,7 +1,7 @@
 import bitalino
 import time
 device = bitalino.BITalino()
-#By Kromtar#
+#By Olivier.-#
 
 samples = 100                       #Numero de samples
 read = 2                          #Read
@@ -14,7 +14,7 @@ SamplingRate = samples
 device.open(macAddress, SamplingRate) 
 th = device.battery(20)
 BITversion = device.version() 
-print "Bienvenido a la locura, sapbe"
+print "Bienvenido a LedMotions"
 
 device.start([0,1,2,3,4,5])
 device.trigger([1,1,1,1])
