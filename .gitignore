@@ -1,0 +1,61 @@
+import bitalino
+import time
+device = bitalino.BITalino()
+#By Kromtar#
+
+samples = 100                       #Numero de samples
+read = 2                          #Read
+macAddress = "98:D3:31:B2:12:D0"    #MAC Bitalino
+ciclos = 10                     #Numero de ciclos 
+
+a = 0
+estado = 0
+SamplingRate = samples
+device.open(macAddress, SamplingRate) 
+th = device.battery(20)
+BITversion = device.version() 
+print "Bienvenido a la locura, sapbe"
+
+device.start([0,1,2,3,4,5])
+device.trigger([1,1,1,1])
+
+while a < ciclos:
+    dataAcquired = device.read(read)
+    SeqN = dataAcquired[0,:]   
+    D0 = dataAcquired[1,:]
+    D1 = dataAcquired[2,:]
+    D2 = dataAcquired[3,:]
+    D3 = dataAcquired[4,:]
+    A0 = dataAcquired[5,:]
+    A1 = dataAcquired[6,:]
+    A2 = dataAcquired[7,:]
+    A3 = dataAcquired[8,:]
+    A4 = dataAcquired[9,:]
+    A5 = dataAcquired[10,:]
+    for i in range(read):
+        datos = A2[i]
+        maximo = datos.max()
+        if maximo > 550:
+            device.trigger([1,0,1,1])
+            print "Persona Feliz"
+            print datos
+            time.sleep(5)
+            estado = 1
+        elif maximo < 550 and maximo >540 :
+            device.trigger([1,1,1,1])
+            print "Persona Normal"
+            print datos
+            time.sleep(5)
+            estado = 1
+        elif maximo < 540:
+            device.trigger([0,1,1,1])
+            print "Persona Enojada"
+            print datos
+            time.sleep(5)
+            estado = 1
+    a = a + 1
+
+
+
+device.stop()
+device.close()
